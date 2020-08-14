@@ -83,7 +83,7 @@ local function AutoE()
 			local dist = myPos:Distance(hero.Position)
 
 			if dist <= 1200 and buffCountSpear and E_Logic(hero,buffCountSpear) > (hero.Health) then				
-				Input.Cast(_E) -- E KS        
+				Input.Cast(_E)      
 			end
 		end		
 	end	
