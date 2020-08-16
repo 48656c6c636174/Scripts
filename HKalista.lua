@@ -65,35 +65,6 @@ local function UseItems(target)
 	end
 end
 
---[[local function buffdebug()
-		for i = 0, Player.BuffCount do
-			local buff = Player:GetBuff(i)
-			if buff then
-				Game.PrintChat(buff.Name)
-			end
-		end
-end]]
-
---[[local function Qss()
-	for i=SpellSlots.Item1, SpellSlots.Item6 do
-		local _item = Player:GetSpell(i)
-		if _item ~= nil and _item then
-			local itemInfo = _item.Name	
-			if itemInfo == "QuicksilverSash" or itemInfo == "ItemMercurial" then
-				if Player:GetSpellState(i) == SpellStates.Ready then
-					for n = 0, Player.BuffCount do
-						local buff = Player:GetBuff(n)
-						if BuffInst.IsCC(buff) then
-							Input.Cast(i)
-						end
-					end
-				end
-				break
-			end
-		end
-	end
-end]]
-
 local function Combo(target)
 	if Player:GetSpellState(_E) == SpellStates.Ready then
 		local target = ts:GetTarget(1100,ts.Priority.LowestHealth)
@@ -134,6 +105,9 @@ local function OnDraw()
 		local draw_Q = Renderer.DrawCircle3D(Player.Position, 1150, 30,1, 0xFF0000FF)
 	end
 	if Player:GetSpellState(_E) == SpellStates.Ready then
+		local draw_E = Renderer.DrawCircle3D(Player.Position, 1100, 30,1, 0xFF0000FF)
+	end
+	if Player:GetSpellState(_R) == SpellStates.Ready then
 		local draw_E = Renderer.DrawCircle3D(Player.Position, 1100, 30,1, 0xFFFF00FF)
 	end
 	local target = ts:GetTarget(1100,ts.Priority.LowestHealth)
