@@ -14,7 +14,6 @@ local _W = SpellSlots.W
 local _E = SpellSlots.E
 local _R = SpellSlots.R
 
-
 local function E_Logic(target, buffCount)
 	if buffCount > 0 and Player.TotalAD then
 		local Ebasedmg = {20, 30, 40, 50, 60}
@@ -44,32 +43,22 @@ local function countEStacks(target)
 			end
 		end
 	end
-
 	return 0
 end
 
-local function UseItems(target)	
-	for i=SpellSlots.Item1, SpellSlots.Item6 do
-		local _item = Player:GetSpell(i)
-		if _item ~= nil and _item then
-			local itemInfo = _item.Name
-			if itemInfo == "ItemSwordOfFeastAndFamine" or itemInfo == "BilgewaterCutlass" then
-				if Player:GetSpellState(i) == SpellStates.Ready then
-					if Player.Position:Distance(target.Position) <= 550 then
-						Input.Cast(i, target)
-					end
-					break
-				end
-			end
-		end
-	end
-end
-
 local function Combo(target)
+	local PlayerPos = Player.Position
 	if Player:GetSpellState(_E) == SpellStates.Ready then
 		local target = ts:GetTarget(1100,ts.Priority.LowestHealth)
 		local buffCountSpear = countEStacks(target)
 	end
+	--[[if Player:GetSpellState(_Q) == SpellStates.Ready then
+		local missiles = ObjManager.Get("ally", "missiles")
+		for handle, obj in pairs(missiles) do        
+			local _QMissile = obj.AsN       
+		local _QMissile = Player:GetSpell(_Q):AsMissile(_Q)
+		local _Qlogic = _QMissile.StartPos(Player.Position)
+	end]]
 end
 
 local function AutoE()
@@ -96,20 +85,10 @@ local function OnTick()
 	local target = Orb.Mode.Combo and ts:GetTarget(Player.AttackRange + Player.BoundingRadius, ts.Priority.LowestHealth)
 	if target then 
 		Combo(target)
-		UseItems(target)
 	end
 end
 
 local function OnDraw()
-	if Player:GetSpellState(_Q) == SpellStates.Ready then
-		local draw_Q = Renderer.DrawCircle3D(Player.Position, 1150, 30,1, 0xFF0000FF)
-	end
-	if Player:GetSpellState(_E) == SpellStates.Ready then
-		local draw_E = Renderer.DrawCircle3D(Player.Position, 1100, 30,1, 0xFF0000FF)
-	end
-	if Player:GetSpellState(_R) == SpellStates.Ready then
-		local draw_E = Renderer.DrawCircle3D(Player.Position, 1100, 30,1, 0xFFFF00FF)
-	end
 	local target = ts:GetTarget(1100,ts.Priority.LowestHealth)
 	if target then 
 		local E_Info = Renderer.DrawText(target.HealthBarScreenPos, Vector(100,100,0), 'E Damage: ' .. E_Logic(target,countEStacks(target)),  0xFFFFFFFF)
@@ -120,7 +99,7 @@ local function OnDraw()
 end
 
 function OnLoad()
-	if not Player.CharName == "Kalista" then return false end
+	if Player.CharName ~= "Kalista" then return false end 
 	EventManager.RegisterCallback(Enums.Events.OnTick, OnTick)
 	EventManager.RegisterCallback(Enums.Events.OnDraw, OnDraw)
 	Orb.Load()
